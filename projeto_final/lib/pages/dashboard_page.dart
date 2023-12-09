@@ -17,11 +17,11 @@ class DashboardPage extends StatelessWidget {
 
   // Lista de exemplo para simular quadros de tarefas, precisa mudar para inserir a logica de aparição dinamica dos quadros de acordo com as tabelas criadas
   final List<TaskBoard> taskBoards = [
-    TaskBoard(id: 1, name: 'Trabalho', color: 'green'),
-    TaskBoard(id: 2, name: 'Saúde', color: 'orange'),
-    TaskBoard(id: 3, name: 'Estudo', color: 'yellow'),
-    TaskBoard(id: 4, name: 'Flutter', color: 'blue'),
-    TaskBoard(id: 5, name: 'Academia', color: 'pink'),
+    TaskBoard(id: 1, name: 'Trabalho', color: 1),
+    TaskBoard(id: 2, name: 'Saúde', color: 2),
+    TaskBoard(id: 3, name: 'Estudo', color: 3),
+    TaskBoard(id: 4, name: 'Flutter', color: 4),
+    TaskBoard(id: 5, name: 'Academia', color: 5),
   ];
 
   @override
