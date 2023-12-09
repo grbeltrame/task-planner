@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/models/TaskBoard.dart';
+import 'package:projeto_final/utils/pastel_colors.dart';
 import '/pages/tasks_page.dart';
 import '/pages/search_page.dart';
 import '/pages/recent_tasks_page.dart';
@@ -15,22 +17,12 @@ class DashboardPage extends StatelessWidget {
 
   // Lista de exemplo para simular quadros de tarefas, precisa mudar para inserir a logica de aparição dinamica dos quadros de acordo com as tabelas criadas
   final List<TaskBoard> taskBoards = [
-    TaskBoard(id: 1, name: 'Trabalho', color: 1),
-    TaskBoard(id: 2, name: 'Saúde', color: 2),
-    TaskBoard(id: 3, name: 'Estudo', color: 3),
-    TaskBoard(id: 4, name: 'Flutter', color: 4),
-    TaskBoard(id: 5, name: 'Academia', color: 5),
+    TaskBoard(id: 1, name: 'Trabalho', color: 'green'),
+    TaskBoard(id: 2, name: 'Saúde', color: 'orange'),
+    TaskBoard(id: 3, name: 'Estudo', color: 'yellow'),
+    TaskBoard(id: 4, name: 'Flutter', color: 'blue'),
+    TaskBoard(id: 5, name: 'Academia', color: 'pink'),
   ];
-
-  // Mapa de cores em tons pastéis, quando for aplicar a logica de criação dos quadros de forma dinamica,
-  // acrescentem mais opções de cores ou forcem o usuario a informar apenas um numero de 1 a 5
-  final Map<int, Color> pastelColors = {
-    1: Color(0xFFB2DFDB), // Verde
-    2: Color(0xFFFFCCBC), // Laranja
-    3: Color(0xFFC5E1A5), // Amarelo
-    4: Color(0xFFBBDEFB), // Azul
-    5: Color(0xFFFFF59D), // Roxo
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -197,13 +189,4 @@ class QuadroTarefasWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-// Modelo de dados para um quadro de tarefas
-class TaskBoard {
-  final int id;
-  final String name;
-  final int color;
-
-  TaskBoard({required this.id, required this.name, required this.color});
 }
