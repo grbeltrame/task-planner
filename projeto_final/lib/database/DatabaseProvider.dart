@@ -1,5 +1,7 @@
 import 'package:projeto_final/database/tables/User.table.dart';
+import 'package:projeto_final/database/tables/Taskboard.table.dart';
 import 'package:projeto_final/models/user/User.dart';
+import 'package:projeto_final/models/TaskBoard.dart';
 import 'package:projeto_final/models/user/User.dto.newUser.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -30,6 +32,7 @@ class DatabaseProvider {
 
   Future<void> _onCreate(Database db, int version) async {
     await UserTable.createUsersTable(db);
+    await TaskBoardTable.createTaskBoardTable(db);
   }
 
   Future<void> insertUser(UserDtoNewUser newUser) async {
@@ -62,5 +65,22 @@ class DatabaseProvider {
             await UserTable.checkEmailAvailability(db, email);
 
     return availability;
+  }
+
+  Future<List<TaskBoard>> getTaskBoards() async {
+    final db = await database;
+    final result = await db?.query('task_board');
+    print('Resultado da query task_board: $result');
+    return result?.map((map) => TaskBoard.fromMap(map)).toList() ?? [];
+  }
+
+  Future<void> addTaskBoard(TaskBoard taskBoard, String nome, int color) async {
+    final db = await database;
+    await TaskBoardTable.insertTaskBoard(db!, taskBoard, nome, color);
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Lógica para atualizações de esquema
+    await TaskBoardTable.createTaskBoardTable(db);
   }
 }

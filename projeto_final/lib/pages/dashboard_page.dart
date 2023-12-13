@@ -5,24 +5,101 @@ import '/pages/tasks_page.dart';
 import '/pages/search_page.dart';
 import '/pages/recent_tasks_page.dart';
 import '/pages/completed_tasks_page.dart';
+import 'package:projeto_final/database/DatabaseProvider.dart';
+import 'package:projeto_final/pages/widgets/quadro_de_tarefas_widget.dart';
 
 class DashboardPage extends StatelessWidget {
-  // o que falta:
-  //1- toda a logica de manipulação de banco de dados referente a criação de novos quadros de forma dinamica,
-  //aqui eu colquei um exemplo pra testar a UI do quadro
+  Future<List<TaskBoard>> getTaskBoards() async {
+    return await DatabaseProvider.instance.getTaskBoards();
+  }
 
-  //2-navegação de cada quadro para sua tasks_page equivalente
+  void _exibirDialogoAdicionarQuadro(BuildContext context) {
+    TextEditingController nomeController = TextEditingController();
+    int corSelecionada = 1; // Padrão para a primeira cor
 
-  //3- logica para aquisição das tarefas referentes a cada quadro
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Adicionar Novo Quadro'),
+          content: Column(
+            children: [
+              TextField(
+                controller: nomeController,
+                decoration: InputDecoration(labelText: 'Nome do Quadro'),
+              ),
+              SizedBox(height: 16.0),
+              Text('Cor:'),
+              SizedBox(height: 8.0),
+              Wrap(
+                spacing: 8.0,
+                children: pastelColors.keys.map((cor) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      corSelecionada = cor;
+                      _adicionarQuadro(
+                          context, nomeController.text, corSelecionada);
+                    },
+                    child: Container(
+                      width: 24.0,
+                      height: 24.0,
+                      decoration: BoxDecoration(
+                        color: pastelColors[cor],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-  // Lista de exemplo para simular quadros de tarefas, precisa mudar para inserir a logica de aparição dinamica dos quadros de acordo com as tabelas criadas
-  final List<TaskBoard> taskBoards = [
-    TaskBoard(id: 1, name: 'Trabalho', color: 1),
-    TaskBoard(id: 2, name: 'Saúde', color: 2),
-    TaskBoard(id: 3, name: 'Estudo', color: 3),
-    TaskBoard(id: 4, name: 'Flutter', color: 4),
-    TaskBoard(id: 5, name: 'Academia', color: 5),
-  ];
+  void _adicionarQuadro(BuildContext context, String nome, int cor) async {
+    // Lógica para adicionar o novo quadro ao banco de dados
+    TaskBoard novoQuadro = TaskBoard(name: nome, color: cor);
+    await DatabaseProvider.instance.addTaskBoard(novoQuadro, nome, cor);
+
+    // Atualiza a lista de quadros (Se necessário)
+    // setState(() {});
+
+    // Pode adicionar lógica para navegar para a página do novo quadro, se necessário
+  }
+
+  Widget buildTaskBoardWidgets(BuildContext context) {
+    return FutureBuilder<List<TaskBoard>>(
+      future: getTaskBoards(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          print('Erro: ${snapshot.error}');
+          return Text('Erro: ${snapshot.error}');
+        } else {
+          List<TaskBoard> taskBoards = snapshot.data ?? [];
+          print('Número de quadros: ${taskBoards.length}');
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+            ),
+            itemCount: taskBoards.length,
+            itemBuilder: (context, index) {
+              return QuadroTarefasWidget(
+                taskBoard: taskBoards[index],
+                color: pastelColors[taskBoards[index].color]!,
+              );
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,29 +114,10 @@ class DashboardPage extends StatelessWidget {
         actions: [
           PopupMenuButton<String>(
             offset: Offset(0, 48),
-            color: Colors.grey[800], // Defina a cor desejada para o retângulo
+            color: Colors.grey[800],
             onSelected: (value) {
-              if (value == 'deslogar') {
-                // Implementar lógica para deslogar
-                Navigator.pop(context); // Voltar para a tela inicial
-              } else if (value == 'pesquisar') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PesquisaPage()),
-                );
-              } else if (value == 'tarefas_recentes') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TarefasRecentesPage()),
-                );
-              } else if (value == 'tarefas_concluidas') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TarefasConcluidasPage()),
-                );
-              }
+              // Implementar lógica para deslogar
+              Navigator.pop(context);
             },
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<String>(
@@ -88,9 +146,9 @@ class DashboardPage extends StatelessWidget {
           ),
           PopupMenuButton<String>(
             offset: Offset(0, 48),
-            color: Colors.grey[800], // Defina a cor desejada para o retângulo
+            color: Colors.grey[800],
             onSelected: (value) {
-              // Implementar lógica para adicionar nova tarefa
+              _exibirDialogoAdicionarQuadro(context);
             },
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<String>(
@@ -115,78 +173,10 @@ class DashboardPage extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-            ),
-            itemCount: taskBoards.length,
-            itemBuilder: (context, index) {
-              return QuadroTarefasWidget(
-                taskBoard: taskBoards[index],
-                color: pastelColors[taskBoards[index].color]!,
-              );
-            },
-          ),
+          child: buildTaskBoardWidgets(context),
         ),
       ),
       backgroundColor: Colors.black87,
-    );
-  }
-}
-
-// Widget para exibir cada quadro de tarefas
-class QuadroTarefasWidget extends StatelessWidget {
-  final TaskBoard taskBoard;
-  final Color color;
-
-  QuadroTarefasWidget({required this.taskBoard, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // Implementar lógica para clicar no quadro e ver as tarefas
-        print('Clicou no quadro: ${taskBoard.name}');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              taskBoard.name,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  topRight: Radius.circular(12.0),
-                  bottomLeft: Radius.circular(12.0),
-                  bottomRight: Radius.circular(12.0),
-                ),
-              ),
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Tarefas: 0',
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
