@@ -1,5 +1,6 @@
+import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:projeto_final/models/TaskBoard.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 
 class TaskBoardTable {
   static const String _tableName = 'task_board';
@@ -9,7 +10,7 @@ class TaskBoardTable {
 
   static Future<void> createTaskBoardTable(Database db) async {
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS $_tableName (
+      CREATE TABLE $_tableName (
         $_id INTEGER PRIMARY KEY AUTOINCREMENT,
         $_name VARCHAR NOT NULL,
         $_color INTEGER NOT NULL
@@ -27,19 +28,26 @@ class TaskBoardTable {
   }
 
   static Future<void> insertTaskBoard(
-      Database db, TaskBoard taskBoard, String nome, int color) async {
+      Database db, TaskBoardDtoNewTaskBoard taskBoardDtoNewTaskBoard) async {
     await db.insert(
       _tableName,
-      taskBoard.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      taskBoardDtoNewTaskBoard.toMap(),
     );
   }
 
   static Future<List<TaskBoard>> getTaskBoards(Database db) async {
     final List<Map<String, dynamic>> maps = await db.query(_tableName);
-    return List.generate(maps.length, (i) {
-      return TaskBoard.fromMap(maps[i]);
-    });
+
+    return List.generate(
+      maps.length,
+      (index) {
+        return TaskBoard(
+          maps[index][_id],
+          maps[index][_name],
+          maps[index][_color],
+        );
+      },
+    );
   }
 
   static Future<bool> checkTaskBoardNameAvailability(
