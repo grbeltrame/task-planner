@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/models/TaskBoard.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 
 // Widget para exibir cada quadro de tarefas
 class QuadroTarefasWidget extends StatelessWidget {

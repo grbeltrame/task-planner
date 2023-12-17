@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/models/TaskBoard.dart';
+import 'package:projeto_final/controllers/TaskBoard.controller.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
 import 'package:projeto_final/utils/pastel_colors.dart';
-import '/pages/tasks_page.dart';
-import '/pages/search_page.dart';
-import '/pages/recent_tasks_page.dart';
-import '/pages/completed_tasks_page.dart';
-import 'package:projeto_final/database/DatabaseProvider.dart';
 import 'package:projeto_final/pages/widgets/quadro_de_tarefas_widget.dart';
 
-class DashboardPage extends StatelessWidget {
-  Future<List<TaskBoard>> getTaskBoards() async {
-    return await DatabaseProvider.instance.getTaskBoards();
-  }
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  TaskBoardController taskBoardController = TaskBoardController();
 
   void _exibirDialogoAdicionarQuadro(BuildContext context) {
     TextEditingController nomeController = TextEditingController();
@@ -21,7 +23,7 @@ class DashboardPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Adicionar Novo Quadro'),
+          title: const Text('Adicionar Novo Quadro'),
           content: Column(
             children: [
               TextField(
@@ -60,22 +62,27 @@ class DashboardPage extends StatelessWidget {
   }
 
   void _adicionarQuadro(BuildContext context, String nome, int cor) async {
-    // Lógica para adicionar o novo quadro ao banco de dados
-    TaskBoard novoQuadro = TaskBoard(name: nome, color: cor);
-    await DatabaseProvider.instance.addTaskBoard(novoQuadro, nome, cor);
+    TaskBoardDtoNewTaskBoard taskBoardDtoNewTaskBoard =
+        TaskBoardDtoNewTaskBoard(nome, cor);
 
-    // Atualiza a lista de quadros (Se necessário)
-    // setState(() {});
+    final registrationSuccess =
+        await taskBoardController.insertTaskBoard(taskBoardDtoNewTaskBoard);
 
-    // Pode adicionar lógica para navegar para a página do novo quadro, se necessário
+    if (registrationSuccess) {
+      setState(() {
+        buildTaskBoardWidgets(context);
+      });
+    }
+
+    // Falta implementar o que acontece quando o nome do quadro já existe
   }
 
   Widget buildTaskBoardWidgets(BuildContext context) {
     return FutureBuilder<List<TaskBoard>>(
-      future: getTaskBoards(),
+      future: taskBoardController.getTaskBoards(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           print('Erro: ${snapshot.error}');
           return Text('Erro: ${snapshot.error}');
@@ -83,7 +90,7 @@ class DashboardPage extends StatelessWidget {
           List<TaskBoard> taskBoards = snapshot.data ?? [];
           print('Número de quadros: ${taskBoards.length}');
           return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
@@ -105,7 +112,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Dashboard',
           style: TextStyle(color: Colors.white),
         ),
@@ -120,27 +127,27 @@ class DashboardPage extends StatelessWidget {
               Navigator.pop(context);
             },
             itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
+              const PopupMenuItem<String>(
                 value: 'deslogar',
                 child: Text('Deslogar', style: TextStyle(color: Colors.white)),
               ),
-              PopupMenuItem<String>(
+              const PopupMenuItem<String>(
                 value: 'pesquisar',
                 child: Text('Pesquisar', style: TextStyle(color: Colors.white)),
               ),
-              PopupMenuItem<String>(
+              const PopupMenuItem<String>(
                 value: 'tarefas_recentes',
                 child: Text('Tarefas Recentes',
                     style: TextStyle(color: Colors.white)),
               ),
-              PopupMenuItem<String>(
+              const PopupMenuItem<String>(
                 value: 'tarefas_concluidas',
                 child: Text('Tarefas Concluídas',
                     style: TextStyle(color: Colors.white)),
               ),
             ],
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text('MENU', style: TextStyle(color: Colors.white)),
             ),
           ),
@@ -151,7 +158,7 @@ class DashboardPage extends StatelessWidget {
               _exibirDialogoAdicionarQuadro(context);
             },
             itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
+              const PopupMenuItem<String>(
                 value: 'adicionar_quadro',
                 child: Row(
                   children: [
@@ -163,8 +170,8 @@ class DashboardPage extends StatelessWidget {
                 ),
               ),
             ],
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Icon(Icons.add, color: Colors.white),
             ),
           ),
