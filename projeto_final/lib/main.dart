@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/database/DatabaseProvider.dart';
-import 'package:projeto_final/database/tables/Taskboard.table.dart';
 import 'pages/home_page.dart';
 
 void main() async {

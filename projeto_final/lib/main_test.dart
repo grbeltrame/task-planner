@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:projeto_final/database/tables/Taskboard.table.dart';
 import 'package:projeto_final/database/tables/User.table.dart';
-import 'package:projeto_final/models/TaskBoard.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
 import 'package:projeto_final/models/user/User.dto.newUser.dart';
 import 'package:projeto_final/pages/dashboard_page.dart';
 import 'package:sqflite/sqflite.dart';
@@ -48,7 +49,7 @@ void main() {
       await UserTable.insertUser(db, user);
 
       // Criar quadro de tarefas de exemplo
-      final taskBoard = TaskBoard(id: 1, name: 'Work', color: 1);
+      final taskBoard = TaskBoardDtoNewTaskBoard('Work', 1);
 
       // Inserir quadro de tarefas no banco de dados
       await TaskBoardTable.insertTaskBoard(db, taskBoard);
