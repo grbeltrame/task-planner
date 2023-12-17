@@ -1,7 +1,8 @@
 import 'package:projeto_final/database/tables/User.table.dart';
 import 'package:projeto_final/database/tables/Taskboard.table.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
 import 'package:projeto_final/models/user/User.dart';
-import 'package:projeto_final/models/TaskBoard.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 import 'package:projeto_final/models/user/User.dto.newUser.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -68,19 +69,27 @@ class DatabaseProvider {
   }
 
   Future<List<TaskBoard>> getTaskBoards() async {
-    final db = await database;
-    final result = await db?.query('task_board');
-    print('Resultado da query task_board: $result');
-    return result?.map((map) => TaskBoard.fromMap(map)).toList() ?? [];
+    final Database? db = await instance.database;
+
+    final List<TaskBoard> taskBoardsList =
+        await TaskBoardTable.getTaskBoards(db!);
+
+    return taskBoardsList;
   }
 
-  Future<void> addTaskBoard(TaskBoard taskBoard, String nome, int color) async {
+  Future<void> insertTaskBoard(
+      TaskBoardDtoNewTaskBoard taskBoardDtoNewTaskBoard) async {
     final db = await database;
-    await TaskBoardTable.insertTaskBoard(db!, taskBoard, nome, color);
+
+    await TaskBoardTable.insertTaskBoard(db!, taskBoardDtoNewTaskBoard);
   }
 
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Lógica para atualizações de esquema
-    await TaskBoardTable.createTaskBoardTable(db);
+  Future<bool> checkTaskBoardNameAvailability(String taskBoardName) async {
+    final Database? db = await instance.database;
+
+    final bool availability =
+        await TaskBoardTable.checkTaskBoardNameAvailability(db!, taskBoardName);
+
+    return availability;
   }
 }
