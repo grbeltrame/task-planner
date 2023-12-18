@@ -1,6 +1,6 @@
 import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
-import 'package:projeto_final/models/task/Tasl.dto.modifyTask.dart';
+import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 import 'package:projeto_final/services/Task.service.dart';
 
 class TaskController {

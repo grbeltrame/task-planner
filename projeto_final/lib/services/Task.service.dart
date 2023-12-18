@@ -1,7 +1,7 @@
 import 'package:projeto_final/database/DatabaseProvider.dart';
 import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
-import 'package:projeto_final/models/task/Tasl.dto.modifyTask.dart';
+import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 
 class TaskService {
   Future<void> insertTask(TaskDtoNewTask taskDtoNewTask) async {

@@ -3,7 +3,7 @@ import 'package:projeto_final/database/tables/User.table.dart';
 import 'package:projeto_final/database/tables/Taskboard.table.dart';
 import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
-import 'package:projeto_final/models/task/Tasl.dto.modifyTask.dart';
+import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
 import 'package:projeto_final/models/user/User.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
