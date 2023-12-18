@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_final/controllers/User.controller.dart';
 import 'package:projeto_final/pages/widgets/login_form.dart';
 import 'package:projeto_final/pages/widgets/register_form.dart';
-import '/pages/dashboard_page.dart';
+// import '/pages/dashboard_page.dart';
 
 class HomePage extends StatefulWidget {
   @override

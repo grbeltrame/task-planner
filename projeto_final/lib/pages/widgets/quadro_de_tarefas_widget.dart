@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
+import 'package:projeto_final/pages/tasks_page.dart';
 
 // Widget para exibir cada quadro de tarefas
 class QuadroTarefasWidget extends StatelessWidget {
@@ -13,7 +14,15 @@ class QuadroTarefasWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         // Implementar lógica para clicar no quadro e ver as tarefas
-        print('Clicou no quadro: ${taskBoard.name}');
+        try {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TarefasPage(taskBoard: taskBoard),
+              ));
+        } catch (error) {
+          print('Erro ao navegar para a página de pesquisa: $error');
+        }
       },
       child: Container(
         decoration: BoxDecoration(

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 
 class TarefasPage extends StatelessWidget {
-  // o que falta:
-  //tudo kkk, so alterei as cores da pagina, ainda n fiz a UI das tarefas e obviamente falta toda a logica de bd
+  final TaskBoard taskBoard;
+
+  TarefasPage({required this.taskBoard});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Dashboard',
+          taskBoard.name,
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black12,
@@ -18,7 +21,8 @@ class TarefasPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Implementar lista de tarefas e opções de manipulação
+            Text("Você esta na pagina da tarefa ${taskBoard.id}",
+                style: TextStyle(color: Colors.white)),
           ],
         ),
       ),
