@@ -105,28 +105,4 @@ class TaskTable {
       whereArgs: [taskId],
     );
   }
-
-  static Future<List<Task>> getTasksByTaskBoardId(
-      Database db, int taskBoardId) async {
-    final List<Map<String, dynamic>> maps = await db.query(_tableName);
-
-    final List<Map<String, dynamic>> boardTasks =
-        maps.where((task) => task[_taskBoardId] == taskBoardId).toList();
-
-    final List<Task> tasks = boardTasks.map((task) {
-      return Task(
-        task[_id],
-        task[_userId],
-        task[_taskBoardId],
-        task[_title],
-        task[_note],
-        DateTime.parse(task[_date]),
-        DateTime.parse(task[_startTime]),
-        DateTime.parse(task[_endTime]),
-        task[_isCompleted] == 1 ? true : false,
-      );
-    }).toList();
-
-    return tasks;
-  }
 }

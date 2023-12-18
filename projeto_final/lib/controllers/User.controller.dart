@@ -13,4 +13,9 @@ class UserController {
   Future<bool> registerUser(UserDtoNewUser userDtoNewUser) {
     return _userService.registerUser(userDtoNewUser);
   }
+
+  Future<int?> getUserId(UserDtoCredentials userDtoCredentials) async {
+    User? user = await loginUser(userDtoCredentials);
+    return user?.id;
+  }
 }

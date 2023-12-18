@@ -2,10 +2,15 @@ import 'package:projeto_final/database/DatabaseProvider.dart';
 import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
 import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
+import 'package:sqflite/sqflite.dart';
 
 class TaskService {
   Future<void> insertTask(TaskDtoNewTask taskDtoNewTask) async {
     await DatabaseProvider.instance.insertTask(taskDtoNewTask);
+  }
+
+  Future<Database?> getDatabase() async {
+    return await DatabaseProvider.instance.database;
   }
 
   Future<List<Task>> getTasksByUserId(int userId) async {
