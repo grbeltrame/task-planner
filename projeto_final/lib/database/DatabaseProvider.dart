@@ -1,5 +1,9 @@
+import 'package:projeto_final/database/tables/Task.table.dart';
 import 'package:projeto_final/database/tables/User.table.dart';
 import 'package:projeto_final/database/tables/Taskboard.table.dart';
+import 'package:projeto_final/models/task/Task.dart';
+import 'package:projeto_final/models/task/Task.dto.newTask.dart';
+import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
 import 'package:projeto_final/models/user/User.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
@@ -34,6 +38,7 @@ class DatabaseProvider {
   Future<void> _onCreate(Database db, int version) async {
     await UserTable.createUsersTable(db);
     await TaskBoardTable.createTaskBoardTable(db);
+    await TaskTable.createTaskTable(db);
   }
 
   Future<void> insertUser(UserDtoNewUser newUser) async {
@@ -91,5 +96,39 @@ class DatabaseProvider {
         await TaskBoardTable.checkTaskBoardNameAvailability(db!, taskBoardName);
 
     return availability;
+  }
+
+  Future<void> insertTask(TaskDtoNewTask newTask) async {
+    final db = await database;
+
+    await TaskTable.insertTask(db!, newTask);
+  }
+
+  Future<List<Task>> getTasksByUserId(int userId) async {
+    final Database? db = await instance.database;
+
+    final List<Task> tasksList = await TaskTable.getTasksByUserId(db!, userId);
+
+    return tasksList;
+  }
+
+  Future<Task?> getTaskById(int taskId) async {
+    final Database? db = await instance.database;
+
+    final Task? task = await TaskTable.getTaskById(db!, taskId);
+
+    return task;
+  }
+
+  Future<void> updateTask(TaskDtoModifyTask taskDtoModifyTask) async {
+    final Database? db = await instance.database;
+
+    await TaskTable.updateTask(db!, taskDtoModifyTask);
+  }
+
+  Future<void> deleteTask(int taskId) async {
+    final Database? db = await instance.database;
+
+    await TaskTable.deleteTask(db!, taskId);
   }
 }
