@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projeto_final/controllers/TaskBoard.controller.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
+import 'package:projeto_final/pages/completed_tasks_page.dart';
+import 'package:projeto_final/pages/recent_tasks_page.dart';
+import 'package:projeto_final/pages/search_page.dart';
 import 'package:projeto_final/utils/pastel_colors.dart';
 import 'package:projeto_final/pages/widgets/quadro_de_tarefas_widget.dart';
 
@@ -123,8 +126,43 @@ class _DashboardPageState extends State<DashboardPage> {
             offset: Offset(0, 48),
             color: Colors.grey[800],
             onSelected: (value) {
-              // Implementar lógica para deslogar
-              Navigator.pop(context);
+              if (value == 'deslogar') {
+                try {
+                  Navigator.pop(context);
+                } catch (error) {
+                  print('Erro ao navegar para a página de pesquisa: $error');
+                }
+              } else if (value == 'pesquisar') {
+                try {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                        builder: (context) => new PesquisaPage(),
+                      ));
+                } catch (error) {
+                  print('Erro ao navegar para a página de pesquisa: $error');
+                }
+              } else if (value == 'tarefas_recentes') {
+                try {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                        builder: (context) => new TarefasRecentesPage(),
+                      ));
+                } catch (error) {
+                  print('Erro ao navegar para a página de pesquisa: $error');
+                }
+              } else if (value == 'tarefas_concluidas') {
+                try {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                        builder: (context) => new TarefasConcluidasPage(),
+                      ));
+                } catch (error) {
+                  print('Erro ao navegar para a página de pesquisa: $error');
+                }
+              }
             },
             itemBuilder: (BuildContext context) => [
               const PopupMenuItem<String>(
