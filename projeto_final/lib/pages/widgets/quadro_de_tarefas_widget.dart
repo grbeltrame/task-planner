@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 import 'package:projeto_final/pages/tasks_page.dart';
 
 // Widget para exibir cada quadro de tarefas
-class QuadroTarefasWidget extends StatelessWidget {
+class QuadroTarefasWidget extends StatefulWidget {
   final TaskBoard taskBoard;
   final Color color;
 
-  QuadroTarefasWidget({required this.taskBoard, required this.color});
+  const QuadroTarefasWidget({
+    super.key,
+    required this.taskBoard,
+    required this.color,
+  });
 
+  @override
+  State<QuadroTarefasWidget> createState() => _QuadroTarefasWidgetState();
+}
+
+class _QuadroTarefasWidgetState extends State<QuadroTarefasWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -18,7 +28,9 @@ class QuadroTarefasWidget extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TarefasPage(taskBoard: taskBoard),
+                builder: (context) => TarefasPage(
+                  taskBoard: widget.taskBoard,
+                ),
               ));
         } catch (error) {
           print('Erro ao navegar para a página de pesquisa: $error');
@@ -26,7 +38,7 @@ class QuadroTarefasWidget extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: color,
+          color: widget.color,
           borderRadius: BorderRadius.circular(12.0),
         ),
         padding: const EdgeInsets.all(12.0),
@@ -35,7 +47,7 @@ class QuadroTarefasWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              taskBoard.name,
+              widget.taskBoard.name,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/controllers/Task.controller.dart';
 import 'package:projeto_final/controllers/TaskBoard.controller.dart';
+import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dto.newTaskBoard.dart';
+import 'package:projeto_final/models/user/User.dart';
 import 'package:projeto_final/pages/completed_tasks_page.dart';
 import 'package:projeto_final/pages/recent_tasks_page.dart';
 import 'package:projeto_final/pages/search_page.dart';
@@ -9,7 +12,12 @@ import 'package:projeto_final/utils/pastel_colors.dart';
 import 'package:projeto_final/pages/widgets/quadro_de_tarefas_widget.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+  final User user;
+
+  const DashboardPage({
+    super.key,
+    required this.user,
+  });
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -17,6 +25,29 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   TaskBoardController taskBoardController = TaskBoardController();
+  TaskController taskController = TaskController();
+
+  late List<Task> tasks;
+
+  @override
+  void initState() {
+    super.initState();
+    assignTasksFromDatabase();
+  }
+
+  Future<List<Task>> callTasksDatabase() async {
+    List<Task> tasks = await taskController.getTasksByUserId(widget.user.id);
+
+    return tasks;
+  }
+
+  Future<void> assignTasksFromDatabase() async {
+    List<Task> tasksFromUser = await callTasksDatabase();
+
+    setState(() {
+      tasks = tasksFromUser;
+    });
+  }
 
   void _exibirDialogoAdicionarQuadro(BuildContext context) {
     TextEditingController nomeController = TextEditingController();
