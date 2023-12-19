@@ -112,6 +112,15 @@ class DatabaseProvider {
     return tasksList;
   }
 
+  Future<List<Task>> getTasksByTaskBoardId(int userId, int taskBoardId) async {
+    final Database? db = await instance.database;
+
+    final List<Task> tasksList =
+        await TaskTable.getTasksByTaskBoardId(db!, userId, taskBoardId);
+
+    return tasksList;
+  }
+
   Future<Task?> getTaskById(int taskId) async {
     final Database? db = await instance.database;
 
