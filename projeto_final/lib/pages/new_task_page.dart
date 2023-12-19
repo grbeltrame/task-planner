@@ -3,7 +3,6 @@ import 'package:projeto_final/contexts/user.context.dart';
 import 'package:projeto_final/controllers/Task.controller.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
-import 'package:projeto_final/models/user/User.dart';
 import 'package:provider/provider.dart';
 
 class NewTaskPage extends StatefulWidget {
