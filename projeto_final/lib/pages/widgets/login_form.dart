@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/contexts/user.context.dart';
 import 'package:projeto_final/controllers/User.controller.dart';
 import 'package:projeto_final/models/user/User.dto.credentials.dart';
 import 'package:projeto_final/pages/dashboard_page.dart';
 import 'package:projeto_final/utils/Validation.register.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   final Function() changeWidgetForm;
@@ -58,9 +60,16 @@ class _LoginFormState extends State<LoginForm> {
     _updateValidationStatus('userLoggedIn', user != null);
 
     if (user != null) {
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      userProvider.updateUser(user);
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+        MaterialPageRoute(
+            builder: (context) => DashboardPage(
+                  user: user,
+                )),
       );
     }
   }

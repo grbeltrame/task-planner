@@ -72,12 +72,12 @@ class _RegisterFormState extends State<RegisterForm> {
 
     _updateValidationStatus('userAlreadyCreated', registrationSuccess);
 
-    if (registrationSuccess) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
-      );
-    }
+    // if (registrationSuccess) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => DashboardPage()),
+    //   );
+    // }
   }
 
   @override
