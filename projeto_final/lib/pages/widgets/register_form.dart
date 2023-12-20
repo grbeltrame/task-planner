@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/contexts/user.context.dart';
 import 'package:projeto_final/controllers/User.controller.dart';
+import 'package:projeto_final/models/user/User.dto.credentials.dart';
 import 'package:projeto_final/models/user/User.dto.newUser.dart';
 import 'package:projeto_final/pages/dashboard_page.dart';
 import 'package:projeto_final/utils/Validation.register.dart';
+import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {
   final Function() changeWidgetForm;
@@ -73,9 +76,19 @@ class _RegisterFormState extends State<RegisterForm> {
     _updateValidationStatus('userAlreadyCreated', registrationSuccess);
 
     if (registrationSuccess) {
+      final user = await widget.userController
+          .loginUser(UserDtoCredentials(username, password));
+
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      userProvider.updateUser(user!);
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+        MaterialPageRoute(
+            builder: (context) => DashboardPage(
+                  user: user,
+                )),
       );
     }
   }

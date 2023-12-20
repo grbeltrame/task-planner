@@ -20,6 +20,13 @@ class TaskService {
     return tasksList;
   }
 
+  Future<List<Task>> getTasksByTaskBoardId(int userId, int taskBoardId) async {
+    final List<Task> tasksList = await DatabaseProvider.instance
+        .getTasksByTaskBoardId(userId, taskBoardId);
+
+    return tasksList;
+  }
+
   Future<Task?> getTaskById(int taskId) async {
     final Task? task = await DatabaseProvider.instance.getTaskById(taskId);
 

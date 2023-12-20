@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/controllers/Task.controller.dart';
-import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 import 'package:projeto_final/models/task/Task.dart';
 
 class UpdateTaskPage extends StatelessWidget {

@@ -2,8 +2,8 @@ import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 import 'package:projeto_final/models/user/User.dart';
 
 class TaskDtoNewTask {
-  User user;
-  TaskBoard taskBoard;
+  int idUser;
+  int idTaskBoard;
   String title;
   String note;
   DateTime date;
@@ -11,13 +11,13 @@ class TaskDtoNewTask {
   DateTime endTime;
   bool isDone;
 
-  TaskDtoNewTask(this.user, this.taskBoard, this.title, this.note, this.date,
-      this.startTime, this.endTime, this.isDone);
+  TaskDtoNewTask(this.idUser, this.idTaskBoard, this.title, this.note,
+      this.date, this.startTime, this.endTime, this.isDone);
 
   Map<String, dynamic> toMap() {
     return {
-      'user_id': user.id,
-      'task_board_id': taskBoard.id,
+      'user_id': idUser,
+      'task_board_id': idTaskBoard,
       'title': title,
       'note': note,
       'date': date.toString(),

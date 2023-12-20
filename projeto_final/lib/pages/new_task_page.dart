@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/contexts/user.context.dart';
 import 'package:projeto_final/controllers/Task.controller.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
+import 'package:provider/provider.dart';
 
-class NewTaskPage extends StatelessWidget {
+class NewTaskPage extends StatefulWidget {
   final TaskBoard taskBoard;
 
   NewTaskPage({required this.taskBoard});
 
+  @override
+  State<NewTaskPage> createState() => _NewTaskPageState();
+}
+
+class _NewTaskPageState extends State<NewTaskPage> {
   final TextEditingController titleController = TextEditingController();
+
   final TextEditingController noteController = TextEditingController();
 
-  Future<void> addTask(BuildContext context) async {}
+  Future<void> addTask(BuildContext context) async {
+    TaskController taskController = TaskController();
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    String title = titleController.text;
+    String note = noteController.text;
+
+    TaskDtoNewTask newTask = TaskDtoNewTask(
+      userProvider.loggedUser.id,
+      widget.taskBoard.id,
+      title,
+      note,
+      DateTime.now(),
+      DateTime.now(),
+      DateTime.now(),
+      false,
+    );
+
+    await taskController.insertTask(newTask);
+
+    Navigator.pop(context, true);
+  }
 
   @override
   Widget build(BuildContext context) {

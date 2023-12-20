@@ -2,7 +2,6 @@ import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
 import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 import 'package:projeto_final/services/Task.service.dart';
-import 'package:projeto_final/database/tables/Task.table.dart';
 
 class TaskController {
   final TaskService _taskService = TaskService();
@@ -13,6 +12,10 @@ class TaskController {
 
   Future<List<Task>> getTasksByUserId(int userId) {
     return _taskService.getTasksByUserId(userId);
+  }
+
+  Future<List<Task>> getTasksByTaskBoardId(int userId, int taskBoardId) {
+    return _taskService.getTasksByTaskBoardId(userId, taskBoardId);
   }
 
   Future<Task?> getTaskById(int taskId) {
