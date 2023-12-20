@@ -214,10 +214,13 @@ class _RegisterFormState extends State<RegisterForm> {
             Container(
               child: GestureDetector(
                 onTap: widget.changeWidgetForm,
-                child: Text(
-                  "Do you have an account? Sign in",
-                  style: TextStyle(
-                    color: Colors.white,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Text(
+                    "Do you have an account? Sign in",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

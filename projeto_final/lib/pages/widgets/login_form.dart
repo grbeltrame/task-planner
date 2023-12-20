@@ -164,10 +164,13 @@ class _LoginFormState extends State<LoginForm> {
           Container(
             child: GestureDetector(
               onTap: widget.changeWidgetForm,
-              child: Text(
-                "Don't you have an account? Sign up",
-                style: TextStyle(
-                  color: Colors.white,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Text(
+                  "Don't you have an account? Sign up",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
