@@ -1,6 +1,3 @@
-import 'package:projeto_final/models/taskboard/TaskBoard.dart';
-import 'package:projeto_final/models/user/User.dart';
-
 class TaskDtoModifyTask {
   int id;
   int idUser;
@@ -25,7 +22,7 @@ class TaskDtoModifyTask {
       'date': date.toIso8601String(),
       'start_time': startTime.toIso8601String(),
       'end_time': endTime.toIso8601String(),
-      'is_done': isDone ? 1 : 0,
+      'is_completed': isDone ? 1 : 0,
     };
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/contexts/user.context.dart';
 import 'package:projeto_final/controllers/Task.controller.dart';
+import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
 import 'package:projeto_final/models/task/Task.dart';
 import 'package:projeto_final/pages/new_task_page.dart';
 import 'package:projeto_final/pages/update_task_page.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class TarefasPage extends StatefulWidget {
   final TaskBoard taskBoard;
@@ -69,10 +71,36 @@ class _TarefasPageState extends State<TarefasPage> {
       MaterialPageRoute(
         builder: (context) => UpdateTaskPage(task: task),
       ),
-    );
+    ).then((result) {
+      if (result != null) {
+        loadTasks();
+      }
+    });
   }
 
-  Future<void> deleteTask(Task task) async {}
+  Future<void> deleteTask(Task task) async {
+    await taskController.deleteTask(task.id);
+
+    loadTasks();
+  }
+
+  Future<void> updateTaskStatus(Task task) async {
+    TaskDtoModifyTask taskDtoModifyTask = TaskDtoModifyTask(
+      task.id,
+      task.idUser,
+      task.idTaskBoard,
+      task.title,
+      task.note,
+      task.date,
+      task.startTime,
+      task.endTime,
+      !task.isDone,
+    );
+
+    await taskController.updateTask(taskDtoModifyTask);
+
+    loadTasks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +129,20 @@ class _TarefasPageState extends State<TarefasPage> {
                     itemBuilder: (context, index) {
                       Task task = tasks[index];
                       return ListTile(
-                          title: Text(task.title),
-                          subtitle: Text("Data: ${task.date.toString()}"),
+                          title: Text(task.title,
+                              style: TextStyle(color: Colors.white)),
+                          subtitle: Text(
+                              "Start date: ${DateFormat('dd/MM/yyyy').format(task.startTime)} \n End date: ${DateFormat('dd/MM/yyyy').format(task.endTime)}",
+                              style: TextStyle(
+                                  color: const Color.fromARGB(
+                                      255, 196, 196, 196))),
                           trailing:
                               Row(mainAxisSize: MainAxisSize.min, children: [
+                            Checkbox(
+                                value: task.isDone,
+                                onChanged: (bool? value) {
+                                  updateTaskStatus(task);
+                                }),
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () => updateTask(task),

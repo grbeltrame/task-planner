@@ -3,6 +3,7 @@ import 'package:projeto_final/contexts/user.context.dart';
 import 'package:projeto_final/controllers/Task.controller.dart';
 import 'package:projeto_final/models/task/Task.dto.newTask.dart';
 import 'package:projeto_final/models/taskboard/TaskBoard.dart';
+import 'package:projeto_final/pages/widgets/date_picker.dart';
 import 'package:provider/provider.dart';
 
 class NewTaskPage extends StatefulWidget {
@@ -32,8 +33,8 @@ class _NewTaskPageState extends State<NewTaskPage> {
       title,
       note,
       DateTime.now(),
-      DateTime.now(),
-      DateTime.now(),
+      _startDate ?? DateTime.now(),
+      _endDate ?? DateTime.now(),
       false,
     );
 
@@ -41,6 +42,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
 
     Navigator.pop(context, true);
   }
+
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +94,24 @@ class _NewTaskPageState extends State<NewTaskPage> {
               style: TextStyle(
                 color: Colors.white,
               ),
+            ),
+            SizedBox(height: 16.0),
+            DatePickerWidget(
+              label: "Inicio",
+              onDateSelected: (DateTime? date) {
+                setState(() {
+                  _startDate = date;
+                });
+              },
+            ),
+            SizedBox(height: 16.0),
+            DatePickerWidget(
+              label: "Fim",
+              onDateSelected: (DateTime? date) {
+                setState(() {
+                  _endDate = date;
+                });
+              },
             ),
             SizedBox(height: 16.0),
             ElevatedButton(

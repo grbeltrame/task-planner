@@ -1,6 +1,3 @@
-import 'package:projeto_final/models/taskboard/TaskBoard.dart';
-import 'package:projeto_final/models/user/User.dart';
-
 class TaskDtoNewTask {
   int idUser;
   int idTaskBoard;

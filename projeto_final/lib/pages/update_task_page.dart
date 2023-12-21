@@ -1,20 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/contexts/user.context.dart';
+import 'package:projeto_final/controllers/Task.controller.dart';
 import 'package:projeto_final/models/task/Task.dart';
+import 'package:projeto_final/models/task/Task.dto.modifyTask.dart';
+import 'package:provider/provider.dart';
 
-class UpdateTaskPage extends StatelessWidget {
+class UpdateTaskPage extends StatefulWidget {
   final Task task;
 
-  UpdateTaskPage({required this.task});
+  const UpdateTaskPage({super.key, required this.task});
 
+  @override
+  State<UpdateTaskPage> createState() => _UpdateTaskPageState();
+}
+
+class _UpdateTaskPageState extends State<UpdateTaskPage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
-  Future<void> updateTask(BuildContext context) async {}
+  Future<void> updateTask(BuildContext context) async {
+    TaskController taskController = TaskController();
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    String title = titleController.text;
+    String note = noteController.text;
+
+    TaskDtoModifyTask modifiedTask = TaskDtoModifyTask(
+      widget.task.id,
+      userProvider.loggedUser.id,
+      widget.task.idTaskBoard,
+      title,
+      note,
+      widget.task.date,
+      widget.task.startTime,
+      widget.task.endTime,
+      false,
+    );
+
+    await taskController.updateTask(modifiedTask);
+
+    Navigator.pop(context, true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    titleController.text = task.title;
-    noteController.text = task.note;
+    titleController.text = widget.task.title;
+    noteController.text = widget.task.note;
 
     return Scaffold(
       appBar: AppBar(
